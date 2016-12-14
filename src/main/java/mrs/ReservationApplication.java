@@ -1,9 +1,10 @@
 package mrs;
 
-import mrs.domain.model.MeetingRoom;
-import mrs.domain.model.ReservableRoom;
-import mrs.domain.model.ReservableRoomId;
-import mrs.domain.model.Reservation;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+import org.apache.catalina.filters.RequestDumperFilter;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
@@ -19,13 +20,14 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.interceptor.*;
-import org.springframework.web.filter.CommonsRequestLoggingFilter;
+import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
+import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
+import org.springframework.transaction.interceptor.TransactionInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import mrs.domain.model.MeetingRoom;
+import mrs.domain.model.ReservableRoom;
+import mrs.domain.model.ReservableRoomId;
+import mrs.domain.model.Reservation;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -38,29 +40,8 @@ public class ReservationApplication {
 
 	@Profile("!cloud")
 	@Bean
-	CommonsRequestLoggingFilter requestDumperFilter() {
-		CommonsRequestLoggingFilter filter = new CommonsRequestLoggingFilter() {
-			@Override
-			protected boolean shouldLog(HttpServletRequest request) {
-				return logger.isInfoEnabled();
-			}
-
-			@Override
-			protected void beforeRequest(HttpServletRequest request, String message) {
-				logger.info(message);
-			}
-
-			@Override
-			protected void afterRequest(HttpServletRequest request, String message) {
-				logger.info(message);
-			}
-		};
-		filter.setIncludePayload(true);
-		filter.setIncludeClientInfo(true);
-		filter.setIncludeHeaders(false);
-		filter.setIncludeQueryString(true);
-		filter.setMaxPayloadLength(2048000);
-		return filter;
+	RequestDumperFilter requestDumperFilter() {
+		return new RequestDumperFilter();
 	}
 
 	@Configuration
