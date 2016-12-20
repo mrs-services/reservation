@@ -3,12 +3,19 @@ package mrs.domain.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.Embeddable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Embeddable
 public class ReservableRoomId implements Serializable {
-
+	private static final Pattern ID_PATTERN = Pattern
+			.compile("(http://.+/)?([0-9]+)_([0-9]{4}-[0-9]{2}-[0-9]{2})$");
+	private static final Logger log = LoggerFactory.getLogger(ReservableRoomId.class);
 	private Integer roomId;
 
 	private LocalDate reservedDate;
@@ -46,19 +53,20 @@ public class ReservableRoomId implements Serializable {
 	}
 
 	public static ReservableRoomId valueOf(String source) {
-		System.out.println("ReservableRoomId valueOf(" + source + ")");
+		log.info("ReservableRoomId valueOf({}), ", source);
 		if (source == null)
 			return null;
-		String[] vals = source.split("_");
-		if (vals.length == 2) {
-			Integer roomId = Integer.valueOf(vals[0]);
-			LocalDate reservedDate = LocalDate.parse(vals[1],
+		Matcher matcher = ID_PATTERN.matcher(source);
+		if (matcher.matches()) {
+			Integer roomId = Integer.valueOf(matcher.group(2));
+			LocalDate reservedDate = LocalDate.parse(matcher.group(3),
 					DateTimeFormatter.ISO_LOCAL_DATE);
 			ReservableRoomId id = new ReservableRoomId(roomId, reservedDate);
-			System.out.println("converted -> " + id);
+			log.info("converted -> {}", id);
 			return id;
 		}
 		else {
+			log.warn("convert failed -> {}", source);
 			return null;
 		}
 	}

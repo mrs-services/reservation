@@ -1,9 +1,14 @@
 package mrs;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import org.apache.catalina.filters.RequestDumperFilter;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
@@ -18,6 +23,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
@@ -42,6 +48,17 @@ public class ReservationApplication {
 	@Bean
 	RequestDumperFilter requestDumperFilter() {
 		return new RequestDumperFilter();
+	}
+
+	@Bean
+	Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
+		return new Jackson2ObjectMapperBuilder()
+				.deserializers(new StdDeserializer<ReservableRoom>(ReservableRoom.class) {
+					@Override
+					public ReservableRoom deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+						return new ReservableRoom(ReservableRoomId.valueOf(jsonParser.getValueAsString()));
+					}
+				});
 	}
 
 	@Configuration
