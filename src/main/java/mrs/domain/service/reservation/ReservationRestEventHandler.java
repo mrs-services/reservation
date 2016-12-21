@@ -14,10 +14,10 @@ import mrs.domain.model.Reservation;
 @Component
 @Transactional
 @RepositoryEventHandler(Reservation.class)
-public class ReservationEventHandler {
+public class ReservationRestEventHandler {
 	private final ReservationService reservationService;
 
-	public ReservationEventHandler(ReservationService reservationService) {
+	public ReservationRestEventHandler(ReservationService reservationService) {
 		this.reservationService = reservationService;
 	}
 

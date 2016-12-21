@@ -50,7 +50,7 @@ public class ReservationService {
 		// 該当の日付・部屋の全予約情報をReservableRoomテーブルから取得し、重複をチェック
 		boolean overlap = reservationRepository
 				.findByReservableRoom_ReservableRoomIdOrderByStartTimeAsc(
-						reservableRoomId).stream().anyMatch(x -> x.overlap(reservation));
+						reservableRoomId).stream().peek(System.out::println).anyMatch(x -> x.overlap(reservation));
 		if (overlap) {
 			throw new AlreadyReservedException("入力の時間帯は既に予約済みです。");
 		}
