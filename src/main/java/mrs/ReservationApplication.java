@@ -25,6 +25,7 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
 import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
@@ -47,6 +48,7 @@ import mrs.domain.model.Reservation;
 @EnableDiscoveryClient
 @EnableResourceServer
 @EnableBinding(Sink.class)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ReservationApplication {
 
 	public static void main(String[] args) {
