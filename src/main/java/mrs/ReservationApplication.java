@@ -16,7 +16,6 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -47,7 +46,7 @@ import mrs.domain.model.Reservation;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableResourceServer
-@EnableBinding(Sink.class)
+@EnableBinding(ReservationSink.class)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ReservationApplication {
 
