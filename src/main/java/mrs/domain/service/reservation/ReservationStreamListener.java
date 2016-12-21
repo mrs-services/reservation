@@ -21,13 +21,14 @@ import mrs.domain.repository.reservation.UnavailableReservationException;
 import mrs.domain.service.notification.NotificationClient;
 
 @Component
-public class ReservationSink {
-	private final static Logger log = LoggerFactory.getLogger(ReservationSink.class);
+public class ReservationStreamListener {
+	private final static Logger log = LoggerFactory
+			.getLogger(ReservationStreamListener.class);
 	private final ReservationRepository reservationRepository;
 	private final ReservationService reservationService;
 	private final NotificationClient notificationClient;
 
-	public ReservationSink(ReservationRepository reservationRepository,
+	public ReservationStreamListener(ReservationRepository reservationRepository,
 			ReservationService reservationService,
 			NotificationClient notificationClient) {
 		this.reservationRepository = reservationRepository;

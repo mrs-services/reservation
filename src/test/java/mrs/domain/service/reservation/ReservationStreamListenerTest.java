@@ -41,9 +41,9 @@ import mrs.domain.service.notification.NotificationClient;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, properties = {
 		"stubrunner.ids-to-service-ids.notification=notification" }, classes = {
-				ReservationApplication.class, ReservationSinkTest.StubConf.class })
+				ReservationApplication.class, ReservationStreamListenerTest.StubConf.class })
 @AutoConfigureStubRunner(ids = "mrs:notification", workOffline = true)
-public class ReservationSinkTest {
+public class ReservationStreamListenerTest {
 	@Autowired
 	Sink sink;
 	@MockBean
