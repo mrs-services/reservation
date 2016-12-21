@@ -60,6 +60,10 @@
             <artifactId>spring-cloud-services-starter-service-registry</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.pivotal.spring.cloud</groupId>
+            <artifactId>spring-cloud-services-starter-circuit-breaker</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>

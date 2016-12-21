@@ -12,6 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 @Component
 public class NotificationClient {
 	private final RestTemplate restTemplate;
@@ -21,6 +23,7 @@ public class NotificationClient {
 		this.restTemplate = restTemplate;
 	}
 
+	@HystrixCommand(fallbackMethod = "createNotificationFallback")
 	public void createNotification(Type type, String message, String userId,
 			String accessToken) {
 		Map<String, Object> json = new HashMap<>();
@@ -36,6 +39,12 @@ public class NotificationClient {
 												"Bearer " + accessToken)
 										.body(json),
 						Void.class);
+	}
+
+	public void createNotificationFallback(Type type, String message, String userId,
+			String accessToken) {
+		log.warn("createNotificationFallback({},{},{},{})", type, message, userId,
+				accessToken);
 	}
 
 	public enum Type {
