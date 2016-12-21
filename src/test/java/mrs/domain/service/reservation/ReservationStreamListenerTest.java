@@ -20,14 +20,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.cloud.stream.messaging.Sink;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.MessagingException;
-import org.springframework.security.config.annotation.ObjectPostProcessor;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import mrs.ReservationApplication;
@@ -41,7 +37,7 @@ import mrs.domain.service.notification.NotificationClient;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, properties = {
 		"stubrunner.ids-to-service-ids.notification=notification" }, classes = {
-				ReservationApplication.class, ReservationStreamListenerTest.StubConf.class })
+				ReservationApplication.class })
 @AutoConfigureStubRunner(ids = "mrs:notification", workOffline = true)
 public class ReservationStreamListenerTest {
 	@Autowired
@@ -171,23 +167,5 @@ public class ReservationStreamListenerTest {
 		assertThat(captorForUserId.getValue()).isEqualTo("maki@example.com");
 		assertThat(captorForAccessToken.getValue())
 				.isEqualTo(accessToken_makiExampleCom());
-	}
-
-	@Configuration
-	static class StubConf {
-		@Bean
-		ObjectPostProcessor postProcessor() {
-			return new ObjectPostProcessor() {
-				@Override
-				public Object postProcess(Object object) {
-					return object;
-				}
-			};
-		}
-
-		@Bean
-		AuthenticationConfiguration authenticationConfiguration() {
-			return new AuthenticationConfiguration();
-		}
 	}
 }
