@@ -28,7 +28,6 @@ public class SleuthConfig {
 			if ("send-metrics".equals(spanName) || "gather-metrics".equals(spanName)) {
 				return false;
 			}
-			System.out.println(spanName + " " + span);
 			return delegate.isSampled(span);
 		}
 	}
